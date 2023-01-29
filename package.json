@@ -10,16 +10,10 @@
         "url": "git://github.com/garronej/js2mjs"
     },
     "scripts": {
-        "grant-exec-perms": "chmod +x ./dist/bin/*.js",
         "build": "tsc",
-        "postbuild": "yarn grant-exec-perms",
-        "pretest": "yarn build",
-        "test": "vitest",
-        "test-precheck": "script/check-test.sh",
         "prettier": "prettier '**/*.{ts,tsx,json,md}'",
         "format": "yarn prettier --write",
-        "format:check": "yarn prettier --list-different",
-        "link_in_test_app": "node dist/bin/link_in_test_app.js"
+        "format:check": "yarn prettier --list-different"
     },
     "bin": {
         "js2mjs": "dist/bin/js2mjs.js"
@@ -38,19 +32,7 @@
     "license": "MIT",
     "dependencies": {
         "commander": "^4.1.1",
-        "comment-json": "^3.0.2",
-        "cosmiconfig": "^7.0.1",
-        "evt": "^2.4.13",
-        "get-github-default-branch-name": "^0.0.4",
-        "gitignore-parser": "0.0.2",
-        "glob": "^7.1.6",
-        "minimal-polyfills": "^2.2.2",
-        "node-fetch": "^2.6.7",
-        "parse-dont-validate": "^4.0.1",
-        "path-depth": "^1.0.0",
-        "scripting-tools": "^0.19.14",
-        "tsafe": "^1.4.1",
-        "url-join": "^4.0.1"
+        "tsafe": "^1.4.1"
     },
     "keywords": [
         "transpile",

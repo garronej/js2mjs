@@ -33,8 +33,6 @@ jobs:
         node-version: ${{ matrix.node }}
     - uses: bahmutov/npm-install@v1
     - run: yarn build
-    - run: yarn test-precheck
-    - run: yarn test
 
   check_if_version_upgraded:
     name: Check if version upgrade
