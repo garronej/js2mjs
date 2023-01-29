@@ -12,6 +12,6 @@ commanderStatic.parse(process.argv);
 const options = commanderStatic.opts();
 
 js2mjs({
-    "srcDirPath": options.srcDirPath,
-    "destDirPath": options.outputDirPath
+    "srcDirPath": options.src,
+    "destDirPath": options.out
 });

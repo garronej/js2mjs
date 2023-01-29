@@ -14,6 +14,8 @@ export async function js2mjs(params: { srcDirPath: string; destDirPath: string }
         srcDirPath,
         destDirPath,
         "transformSourceCodeString": async ({ sourceCode, filePath }) => {
+            console.log(filePath);
+
             if (!/\.(?:js)$/i.test(filePath)) {
                 return { "modifiedSourceCode": sourceCode };
             }
@@ -22,7 +24,8 @@ export async function js2mjs(params: { srcDirPath: string; destDirPath: string }
                 "modifiedSourceCode": await modifyImportExportStatements({
                     sourceCode,
                     "dirPath": path.dirname(filePath)
-                })
+                }),
+                "newFileName": path.basename(filePath).replace(/js$/, "mjs")
             };
         }
     });

@@ -23,10 +23,8 @@ export async function modifyImportExportStatement(params: { dirPath: string; imp
             "parsedArgument": ParsedImportExportStatement.ParsedArgument.parse(argument)
         });
 
-    for (const ext of ["ts", "tsx"]) {
-        if (fs.existsSync(path.join(dirPath, `${relativePath}.${ext}`))) {
-            return stringify(`${relativePath}.mjs`);
-        }
+    if (fs.existsSync(path.join(dirPath, `${relativePath}.js`))) {
+        return stringify(`${relativePath}.mjs`);
     }
 
     return stringify(path.posix.join(relativePath, "index.mjs"));
