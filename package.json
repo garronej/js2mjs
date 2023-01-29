@@ -1,6 +1,6 @@
 {
     "name": "js2mjs",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "homepage": "https://github.com/garronej/js2mjs",
     "description": "Transform a codebase that uses .js into a codebase that uses .mjs",
     "main": "dist/lib/index.js",
