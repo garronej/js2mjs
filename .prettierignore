@@ -1,0 +1,5 @@
+node_modules/
+/dist/
+/docs/
+/res/
+/.yarn_home/
