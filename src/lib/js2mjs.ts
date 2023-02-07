@@ -35,11 +35,18 @@ export async function js2mjs(params: { srcDirPath: string; destDirPath: string |
                 return { "modifiedSourceCode": sourceCode };
             }
 
+            let modifiedSourceCode = await modifyImportExportStatements({
+                sourceCode,
+                "dirPath": path.dirname(filePath)
+            });
+
+            modifiedSourceCode = modifiedSourceCode.replace(
+                /\/\/# sourceMappingURL=(.+\.)js\.map$/,
+                (...[, group]) => `//# sourceMappingURL=${group}mjs.map`
+            );
+
             return {
-                "modifiedSourceCode": await modifyImportExportStatements({
-                    sourceCode,
-                    "dirPath": path.dirname(filePath)
-                }),
+                modifiedSourceCode,
                 "newFileName": path.basename(filePath).replace(/js$/, "mjs")
             };
         }
