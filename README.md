@@ -1,5 +1,7 @@
 # js2mjs
 
+> WARNING: This modules messes up the sourcemaps. I didn't find a way to fix them.
+
 Convert a ESM distribution that is using .js extension to an ESM distribution using .mjs extension.
 
 ## Motivation
