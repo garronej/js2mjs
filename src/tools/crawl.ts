@@ -1,27 +1,32 @@
 import * as fs from "fs";
-import * as path from "path";
+import { join as pathJoin, relative as pathRelative } from "path";
+
+const crawlRec = (dirPath: string, filePaths: string[]) => {
+    for (const basename of fs.readdirSync(dirPath)) {
+        const fileOrDirPath = pathJoin(dirPath, basename);
+
+        if (fs.lstatSync(fileOrDirPath).isDirectory()) {
+            crawlRec(fileOrDirPath, filePaths);
+
+            continue;
+        }
+
+        filePaths.push(fileOrDirPath);
+    }
+};
 
 /** List all files in a given directory return paths relative to the dir_path */
-export const crawl = (() => {
-    const crawlRec = (dir_path: string, paths: string[]) => {
-        for (const file_name of fs.readdirSync(dir_path)) {
-            const file_path = path.join(dir_path, file_name);
+export function crawl(params: { dirPath: string; returnedPathsType: "absolute" | "relative to dirPath" }): string[] {
+    const { dirPath, returnedPathsType } = params;
 
-            if (fs.lstatSync(file_path).isDirectory()) {
-                crawlRec(file_path, paths);
+    const filePaths: string[] = [];
 
-                continue;
-            }
+    crawlRec(dirPath, filePaths);
 
-            paths.push(file_path);
-        }
-    };
-
-    return function crawl(dir_path: string): string[] {
-        const paths: string[] = [];
-
-        crawlRec(dir_path, paths);
-
-        return paths.map(file_path => path.relative(dir_path, file_path));
-    };
-})();
+    switch (returnedPathsType) {
+        case "absolute":
+            return filePaths;
+        case "relative to dirPath":
+            return filePaths.map(filePath => pathRelative(dirPath, filePath));
+    }
+}

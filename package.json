@@ -32,6 +32,7 @@
     "license": "MIT",
     "dependencies": {
         "commander": "^4.1.1",
+        "magic-string": "^0.30.11",
         "tsafe": "^1.4.1"
     },
     "keywords": [

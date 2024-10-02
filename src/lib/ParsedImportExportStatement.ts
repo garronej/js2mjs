@@ -1,4 +1,5 @@
-import { id } from "tsafe";
+/** https://docs.tsafe.dev/id  */
+export const id = <T>(x: T) => x;
 
 export type ParsedImportExportStatement = ParsedImportExportStatement.Regular | ParsedImportExportStatement.Async;
 

@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { ParsedImportExportStatement } from "./ParsedImportExportStatement";
 
-export async function modifyImportExportStatement(params: { dirPath: string; importExportStatement: string }): Promise<string> {
+export function modifyImportExportStatement(params: { dirPath: string; importExportStatement: string }): string {
     const { dirPath, importExportStatement } = params;
 
     const parsedImportExportStatement = ParsedImportExportStatement.parse(params.importExportStatement);
