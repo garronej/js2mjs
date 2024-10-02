@@ -1,6 +1,6 @@
 {
     "name": "js2mjs",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "homepage": "https://github.com/garronej/js2mjs",
     "description": "Patch an ESM distribution that is using .js extension so it use .mjs instead",
     "main": "dist/lib/index.js",
