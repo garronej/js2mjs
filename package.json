@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "homepage": "https://github.com/garronej/js2mjs",
     "description": "Patch an ESM distribution that is using .js extension so it use .mjs instead",
-    "main": "dist/lib/index.js",
-    "types": "dist/lib/index.d.ts",
+    "main": "dist/lib/js2mjs.js",
+    "types": "dist/lib/js2mjs.d.ts",
     "repository": {
         "type": "git",
         "url": "git://github.com/garronej/js2mjs"
@@ -40,6 +40,8 @@
     ],
     "files": [
         "src/",
+        "dist/",
+        "!dist/bin/",
         "dist/bin/main.js"
     ],
     "devDependencies": {
