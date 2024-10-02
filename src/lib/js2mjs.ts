@@ -1,9 +1,10 @@
 import { transformCodebase } from "../tools/transformCodebase";
-import { join as pathJoin, dirname as pathDirname, basename as pathBasename } from "path";
+import { dirname as pathDirname, basename as pathBasename } from "path";
 import { modifyImportExportStatementsFactory } from "./modifyImportExportStatements";
 import { modifyImportExportStatement } from "./modifyImportExportStatement";
-import MagicString from "magic-string";
 import * as fs from "fs";
+import { assert } from "tsafe/assert";
+import { typeGuard } from "tsafe/typeGuard";
 
 export function js2mjs(params: { srcDirPath: string; destDirPath: string | undefined }) {
     const { srcDirPath, destDirPath = srcDirPath } = params;
@@ -17,44 +18,51 @@ export function js2mjs(params: { srcDirPath: string; destDirPath: string | undef
     transformCodebase({
         srcDirPath,
         destDirPath,
-        "transformSourceCode": ({ sourceCode, fileRelativePath, filePath }) => {
-            if (fileRelativePath.endsWith(".js.map")) {
-                return undefined;
+        "transformSourceCode": ({ sourceCode: sourceCode_buffer, filePath }) => {
+            map: {
+                if (!filePath.endsWith(".js.map")) {
+                    break map;
+                }
+
+                const parsed = JSON.parse(sourceCode_buffer.toString("utf8"));
+
+                assert(typeGuard<{ file: String }>(parsed, true));
+
+                const { file } = parsed;
+                const newFile = file.replace(/js$/, "mjs");
+
+                assert(newFile !== file);
+
+                parsed.file = newFile;
+
+                return {
+                    "modifiedSourceCode": Buffer.from(JSON.stringify(parsed), "utf8"),
+                    "newFileName": pathBasename(filePath).replace(/js\.map$/, "mjs.map")
+                };
             }
 
-            if (fileRelativePath.endsWith(".d.ts")) {
-                return { "modifiedSourceCode": sourceCode };
+            js: {
+                if (!filePath.endsWith(".js")) {
+                    break js;
+                }
+
+                let { modifiedSourceCode } = modifyImportExportStatements({
+                    sourceCode: sourceCode_buffer.toString("utf8"),
+                    "dirPath": pathDirname(filePath)
+                });
+
+                modifiedSourceCode = modifiedSourceCode.replace(
+                    /\/\/# sourceMappingURL=(.+\.)js\.map$/,
+                    (...[, group]) => `//# sourceMappingURL=${group}mjs.map`
+                );
+
+                return {
+                    "newFileName": pathBasename(filePath).replace(/js$/, "mjs"),
+                    "modifiedSourceCode": Buffer.from(modifiedSourceCode, "utf8")
+                };
             }
 
-            if (!fileRelativePath.endsWith(".js")) {
-                return { "modifiedSourceCode": sourceCode };
-            }
-
-            const magicString = new MagicString(sourceCode.toString("utf8"));
-
-            modifyImportExportStatements({
-                magicString,
-                "dirPath": pathDirname(filePath)
-            });
-
-            magicString.replace(/\/\/# sourceMappingURL=(.+\.)js\.map$/, (...[, group]) => `//# sourceMappingURL=${group}mjs.map`);
-
-            const newBasename = pathBasename(fileRelativePath).replace(/js$/, "mjs");
-            const newBasename_map = `${newBasename}.map`;
-
-            const sourceMap = magicString.generateMap({
-                source: newBasename,
-                file: newBasename_map,
-                includeContent: true,
-                hires: true
-            });
-
-            sourceMapByFilePath.set(pathJoin(destDirPath, pathDirname(fileRelativePath), newBasename_map), Buffer.from(sourceMap.toString(), "utf8"));
-
-            return {
-                "newFileName": newBasename,
-                "modifiedSourceCode": Buffer.from(magicString.toString(), "utf8")
-            };
+            return { "modifiedSourceCode": sourceCode_buffer };
         }
     });
 

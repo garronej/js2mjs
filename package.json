@@ -45,7 +45,6 @@
         "dist/bin/main.js"
     ],
     "devDependencies": {
-        "magic-string": "^0.30.11",
         "tsafe": "^1.7.4",
         "@types/node": "^18.11.18",
         "husky": "^4.3.8",
