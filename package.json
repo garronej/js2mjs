@@ -2,7 +2,7 @@
     "name": "js2mjs",
     "version": "0.3.0",
     "homepage": "https://github.com/garronej/js2mjs",
-    "description": "Transform a codebase that uses .js into a codebase that uses .mjs",
+    "description": "Patch an ESM distribution that is using .js extension so it use .mjs instead",
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
     "repository": {
@@ -10,13 +10,13 @@
         "url": "git://github.com/garronej/js2mjs"
     },
     "scripts": {
-        "build": "tsc",
+        "build": "tsx scripts/build.ts",
         "prettier": "prettier '**/*.{ts,tsx,json,md}'",
         "format": "yarn prettier --write",
         "format:check": "yarn prettier --list-different"
     },
     "bin": {
-        "js2mjs": "dist/bin/js2mjs.js"
+        "js2mjs": "dist/bin/main.js"
     },
     "lint-staged": {
         "*.{ts,tsx,json,md}": [
@@ -30,26 +30,29 @@
     },
     "author": "u/garronej",
     "license": "MIT",
-    "dependencies": {
-        "commander": "^4.1.1",
-        "magic-string": "^0.30.11",
-        "tsafe": "^1.4.1"
-    },
     "keywords": [
         "transpile",
         "cjs",
-        "CommonJs",
-        "esm"
+        "CommonJS",
+        "ESM",
+        "mjs",
+        "js"
     ],
     "files": [
         "src/",
-        "dist/"
+        "dist/bin/main.js"
     ],
     "devDependencies": {
+        "magic-string": "^0.30.11",
+        "tsafe": "^1.7.4",
         "@types/node": "^18.11.18",
         "husky": "^4.3.8",
         "lint-staged": "^11.0.0",
         "prettier": "^2.3.0",
-        "typescript": "^4.9.4"
+        "typescript": "^5.6.2",
+        "@vercel/ncc": "^0.38.1",
+        "chalk": "^5.3.0",
+        "evt": "^2.5.7",
+        "tsx": "^4.19.1"
     }
 }
